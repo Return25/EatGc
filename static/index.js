@@ -127,7 +127,7 @@
         _gameScore = 0;
         _gameOver = false;
         _gameStart = false;
-        _gameTimeNum = 20;
+        _gameTimeNum = 30;
         GameTimeLayer.innerHTML = creatTimeText(_gameTimeNum);
         countBlockSize();
         refreshGameLayer(GameLayer[0]);
@@ -191,7 +191,7 @@
     }
 
     w.creatTimeText = function(n) {
-        return '&nbsp;TIME:' + n;
+        return '&nbsp;Time:' + n;
     }
 
     let _ttreg = / t{1,2}(\d+)/,
@@ -312,16 +312,16 @@
         l.className = l.className.replace(/bgc\d/, 'bgc' + c);
         document.getElementById('GameScoreLayer-text').innerHTML = shareText(_gameScore);
         let score_text = '得分&nbsp;&nbsp;';
-        score_text += deviation_time < 23000 ? _gameScore : "<span style='color:red;'>" + _gameScore + "</span>";
+        score_text += deviation_time < _gameTimeNum ? _gameScore : "<span style='color:red;'>" + _gameScore + "</span>";
         document.getElementById('GameScoreLayer-score').innerHTML = score_text;
-        let bast = cookie('bast-score');
-        if (deviation_time < 23000) {
-            if (!bast || _gameScore > bast) {
-                bast = _gameScore;
-                cookie('bast-score', bast, 100);
+        let best = cookie('best-score');
+        if (deviation_time < _gameTimeNum) {
+            if (!best || _gameScore > best) {
+                best = _gameScore;
+                cookie('best-score', best, 100);
             }
         }
-        document.getElementById('GameScoreLayer-bast').innerHTML = '最佳&nbsp;&nbsp;' + bast;
+        document.getElementById('GameScoreLayer-best').innerHTML = '最佳&nbsp;&nbsp;' + best;
         l.style.display = 'block';
     }
 
@@ -344,15 +344,15 @@
     w.shareText = function(score) {
         let date2 = new Date();
         deviation_time = (date2.getTime() - _date1.getTime())
-        if (deviation_time > 23000) {
+        /* if (deviation_time > _gameTimeNum) {
             return '倒计时多了' + ((deviation_time / 1000) - 20).toFixed(2) + "s";
-        }
+        }*/
         SubmitResults();
-        if (score <= 49) return '试着好好练一下？';
-        if (score <= 99) return 'TCL';
-        if (score <= 149) return 'TQL';
-        if (score <= 199) return '您';
-        return '人？';
+        if (score <= 29) return '我不会针对你们任何一个人';
+        if (score <= 99) return '闭嘴啊，你们这些人';
+        if (score <= 149) return '是不是有病';
+        if (score <= 199) return '什么鸟人';
+        return '很有个性';
     }
 
     w.toStr = function(obj) {

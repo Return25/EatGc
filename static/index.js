@@ -127,7 +127,7 @@
         _gameScore = 0;
         _gameOver = false;
         _gameStart = false;
-        _gameTimeNum = 30;
+        _gameTimeNum = 16;
         GameTimeLayer.innerHTML = creatTimeText(_gameTimeNum);
         countBlockSize();
         refreshGameLayer(GameLayer[0]);
@@ -312,10 +312,10 @@
         l.className = l.className.replace(/bgc\d/, 'bgc' + c);
         document.getElementById('GameScoreLayer-text').innerHTML = shareText(_gameScore);
         let score_text = '得分&nbsp;&nbsp;';
-        score_text += deviation_time < _gameTimeNum ? _gameScore : "<span style='color:red;'>" + _gameScore + "</span>";
+        score_text += deviation_time < _gameTimeNum * 1000 ? _gameScore : "<span style='color:red;'>" + _gameScore + "</span>";
         document.getElementById('GameScoreLayer-score').innerHTML = score_text;
         let best = cookie('best-score');
-        if (deviation_time < _gameTimeNum) {
+        if (deviation_time < _gameTimeNum * 1000) {
             if (!best || _gameScore > best) {
                 best = _gameScore;
                 cookie('best-score', best, 100);
@@ -344,9 +344,14 @@
     w.shareText = function(score) {
         let date2 = new Date();
         deviation_time = (date2.getTime() - _date1.getTime())
-        /* if (deviation_time > _gameTimeNum) {
-            return '倒计时多了' + ((deviation_time / 1000) - 20).toFixed(2) + "s";
-        }*/
+        
+        // note : 莫名其妙的判断（
+        /*
+        if (deviation_time > _gameTimeNum * 1000) {
+            return '倒计时多了' + ((deviation_time / 1000) - _gameTimeNum).toFixed(2) + "s";
+        }
+        */
+        
         SubmitResults();
         if (score <= 29) return '我不会针对你们任何一个人';
         if (score <= 99) return '闭嘴啊，你们这些人';
